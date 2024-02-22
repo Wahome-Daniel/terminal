@@ -1394,6 +1394,8 @@ BackendD3D::AtlasGlyphEntry* BackendD3D::_drawBuiltinGlyph(const RenderingPayloa
     _drawGlyphAtlasAllocate(p, rect);
     _d2dBeginDrawing();
 
+    auto shadingType = ShadingType::TextGrayscale;
+
     if (BuiltinGlyphs::IsSoftFontChar(glyphIndex))
     {
         _drawSoftFontGlyph(p, rect, glyphIndex);
@@ -1407,10 +1409,11 @@ BackendD3D::AtlasGlyphEntry* BackendD3D::_drawBuiltinGlyph(const RenderingPayloa
             static_cast<f32>(rect.y + rect.h),
         };
         BuiltinGlyphs::DrawBuiltinGlyph(p.d2dFactory.get(), _d2dRenderTarget.get(), _brush.get(), r, glyphIndex);
+        shadingType = ShadingType::TextBuiltinGlyph;
     }
 
     const auto glyphEntry = _drawGlyphAllocateEntry(row, fontFaceEntry, glyphIndex);
-    glyphEntry->shadingType = ShadingType::TextGrayscale;
+    glyphEntry->shadingType = shadingType;
     glyphEntry->overlapSplit = 0;
     glyphEntry->offset.x = 0;
     glyphEntry->offset.y = -baseline;

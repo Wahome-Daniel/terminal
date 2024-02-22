@@ -67,6 +67,16 @@ Output main(PSData data) : SV_Target
         color = weights * data.color;
         break;
     }
+    case SHADING_TYPE_TEXT_BUILTIN_GLYPH:
+    {
+        const float2 on2 = step(frac(data.position.xy / (2.0f * underlineWidth)), 0.5f);
+        const float4 on4 = abs(float4(0, 1, 0, 1) - on2.xxyy);
+        const float4 on42 = on4.xyxy * on4.zzww;
+        const float4 glyph = glyphAtlas[data.texcoord];
+        color = float4(1,1,1,1) * on4.z;
+        weights = color.aaaa;
+        break;
+    }
     case SHADING_TYPE_TEXT_PASSTHROUGH:
     {
         color = glyphAtlas[data.texcoord];
